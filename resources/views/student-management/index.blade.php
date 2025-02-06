@@ -1,7 +1,7 @@
-@extends('layouts.app', ['title' => 'Programs'])
+@extends('layouts.app', ['title' => 'Student Management'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Programs'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Student Management'])
     @if(session('success'))
         <script>
             Swal.fire({
@@ -16,8 +16,8 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex justify-content-between">
-                    <h6>Programs</h6>
-                    <button id="createProgramButton" type="button" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp; Add Program</button>
+                    <h6>Student Management</h6>
+                    <button id="createStudentButton" type="button" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp; Add Student</button>
                 </div>
 
                 <div class="card-body px-0 pt-0 pb-2">
@@ -25,10 +25,12 @@
                         <table id="data-table" class="table align-items-center mb-0">
                             <thead>
                                 <tr>
-                                    <th class="text-center text-uppercase text-xs font-weight-bolder">Program Code</th>
-                                    <th class="text-center text-uppercase text-xs font-weight-bolder">Program Name</th>
-                                    <th class="text-center text-uppercase text-xs font-weight-bolder">Created Date</th>
-                                    <th class="text-center text-uppercase text-xs font-weight-bolder">Updated Date</th>
+                                    <th class="text-center text-uppercase text-xs font-weight-bolder">#</th>
+                                    <th class="text-uppercase text-xs font-weight-bolder">First Name</th>
+                                    <th class="text-uppercase text-xs font-weight-bolder">Last Name</th>
+                                    <th class="text-uppercase text-xs font-weight-bolder">Program</th>
+                                    <th class="text-uppercase text-xs font-weight-bolder">Date Start</th>
+                                    <th class="text-uppercase text-xs font-weight-bolder">Date End</th>
                                     <th class="text-center text-uppercase text-xs font-weight-bolder">Action</th>
                                 </tr>
                             </thead>
@@ -42,14 +44,14 @@
     </div>
 @endsection
 
-<div class="modal fade" id="createProgramModal" tabindex="-1" aria-labelledby="createProgramModalLabel" aria-hidden="true">
+<div class="modal fade" id="createStudentModal" tabindex="-1" aria-labelledby="createStudentModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createProgramModalLabel">Create New Program</h5>
+                <h5 class="modal-title" id="createStudentModalLabel">Create New Student</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="createProgramForm" method="POST">
+            <form id="createStudentForm" method="POST">
                 <div class="modal-body">
                     @csrf
                     <div class="mb-3">
@@ -76,17 +78,17 @@
     </div>
 </div>
 
-<div class="modal fade" id="editProgramModal" tabindex="-1" aria-labelledby="editProgramModalLabel" aria-hidden="true">
+<div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editProgramModalLabel">Modal Title</h5>
+                <h5 class="modal-title" id="editStudentModalLabel">Modal Title</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="editProgramForm" method="POST">
+            <form id="editStudentForm" method="POST">
                 <div class="modal-body">
                     @csrf
-                    <input type="hidden" id="programId" name="id">
+                    <input type="hidden" id="studentId" name="id">
                     <div class="mb-3">
                         <label for="code" class="form-label">Code</label>
                         <input type="text" class="form-control" id="code-edit" name="code">
@@ -119,23 +121,29 @@
     $(document).ready(function () {
 
         $.ajax({
-            url: '/program/fetch-data',
+            url: '/student-management/fetch-data',
             method: 'GET',
             success: function(response) {
                 let rows = '';
                 $.each(response, function(index, item) {
                     rows += `'<tr>
-                                <td class="align-middle text-center text-sm">
-                                    <p class="text-sm font-weight-bold mb-0">${item.code}</p>
+                                <td class="text-center align-middle text-sm">
+                                    <p class="text-sm font-weight-bold mb-0">${index + 1}</p>
                                 </td>
-                                <td>
-                                    <p class="text-sm font-weight-bold mb-0">${item.name}</p>
+                                <td class="align-middle text-sm">
+                                    <p class="text-sm font-weight-bold mb-0">${item.first_name}</p>
                                 </td>
-                                <td class="align-middle text-center text-sm">
-                                    <p class="text-sm font-weight-bold mb-0">${new Date(item.created_at).toLocaleDateString()}</p>
+                                <td class="align-middle text-sm">
+                                    <p class="text-sm font-weight-bold mb-0">${item.last_name}</p>
                                 </td>
-                                <td class="align-middle text-center text-sm">
-                                    <p class="text-sm font-weight-bold mb-0">${new Date(item.updated_at).toLocaleDateString()}</p>
+                                <td class="align-middle text-sm">
+                                    <p class="text-sm font-weight-bold mb-0">${item.program ? item.program.code + ' - '  + item.program.name : 'N/A'}</p>
+                                </td>
+                                <td class="align-middle text-sm">
+                                    <p class="text-sm font-weight-bold mb-0">${new Date(item.start_program_date).toLocaleDateString()}</p>
+                                </td>
+                                <td class="align-middle text-sm">
+                                    <p class="text-sm font-weight-bold mb-0">${new Date(item.end_program_date).toLocaleDateString()}</p>
                                 </td>
                                 <td class="align-middle">
                                     <div class="d-flex gap-2 justify-content-center align-items-center">
@@ -148,14 +156,14 @@
 
                 $('#data-table tbody').html(rows);
 
-                $('#createProgramButton').click(function() {
+                $('#createStudentButton').click(function() {
                     $("#codeError").hide().text('');
                     $("#nameError").hide().text('');
-                    $("#createProgramForm")[0].reset();
-                    $("#createProgramModal").modal('show');
+                    $("#createStudentForm")[0].reset();
+                    $("#createStudentModal").modal('show');
                 });
 
-                $("#createProgramForm").submit(function(event) {
+                $("#createStudentForm").submit(function(event) {
                     event.preventDefault();
 
                     $("#submitBtn").prop('disabled', true);
@@ -173,6 +181,9 @@
                                 var newRow = `<tr>
                                     <td class="align-middle text-center text-sm">
                                         <p class="text-sm font-weight-bold mb-0">${response.data.code}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-sm font-weight-bold mb-0">${response.data.name}</p>
                                     </td>
                                     <td>
                                         <p class="text-sm font-weight-bold mb-0">${response.data.name}</p>
@@ -197,7 +208,7 @@
 
                                 $('#data-table tbody').append(newRow);
 
-                                $("#createProgramModal").modal('hide');
+                                $("#createStudentModal").modal('hide');
                                 $("#successMessage").text(response.message).show();
                                 $("#submitBtn").prop('disabled', false);
 
@@ -245,7 +256,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/program/destroy/' + id,
+                        url: '/student-management/destroy/' + id,
                         method: 'DELETE',
                         data: {
                             _token: '{{ csrf_token() }}',
@@ -290,31 +301,31 @@
             var id = $(this).data('id');
 
             $.ajax({
-                url: '/program/edit/' + id,
+                url: '/student-management/edit/' + id,
                 method: 'GET',
                 success: function(response) {
-                    $('#programId').val(response.data.id);
+                    $('#studentId').val(response.data.id);
                     $('#code-edit').val(response.data.code);
                     $('#name-edit').val(response.data.name);
                     $('#description-edit').val(response.data.description);
 
-                    $('#editProgramModal').modal('show');
+                    $('#editStudentModal').modal('show');
                 }
             });
         });
 
-        $('#editProgramForm').submit(function(event) {
+        $('#editStudentForm').submit(function(event) {
             event.preventDefault();
-            var id = $('#programId').val();
+            var id = $('#studentId').val();
             var form = $(this);
             var formData = form.serialize();
 
             $.ajax({
-                url: 'program/' + id + '/update',
+                url: 'student/' + id + '/update',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
-                    $('#editProgramModal').modal('hide');
+                    $('#editStudentModal').modal('hide');
 
                     var updatedRow = `
                         <td class="align-middle text-center text-sm">
@@ -346,7 +357,7 @@
                     Swal.fire({
                         position: "center",
                         icon: "success",
-                        title: "Program successfully updated",
+                        title: "Student successfully updated",
                         showConfirmButton: false,
                         timer: 1500
                     });

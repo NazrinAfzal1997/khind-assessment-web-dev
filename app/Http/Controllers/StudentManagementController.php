@@ -18,7 +18,7 @@ class StudentManagementController extends Controller
 
     public function fetchData()
     {
-        $data = Student::all();
+        $data = Student::with('program')->get();
 
         return response()->json($data);
     }
