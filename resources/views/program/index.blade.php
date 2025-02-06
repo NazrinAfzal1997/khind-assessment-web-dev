@@ -15,12 +15,14 @@
     <div class="row mt-4 mx-4">
         <div class="col-12">
             <div class="card mb-4">
-                <div class="card-header pb-0">
+                <div class="card-header pb-0 d-flex justify-content-between">
                     <h6>Programs</h6>
+                    <button id="createProgramButton" type="button" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp; Add Program</button>
                 </div>
+
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0 mt-3">
-                        <table class="table align-items-center mb-0">
+                        <table id="data-table" class="table align-items-center mb-0">
                             <thead>
                                 <tr>
                                     <th class="text-center text-uppercase text-xs font-weight-bolder">Program Code</th>
@@ -31,37 +33,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if($programs->isEmpty())
-                                    <tr>
-                                        <td colspan="5">
-                                            <p class="text-sm font-weight-bold mb-0">No Data</p>
-                                        </td>
-                                    </tr>
-                                @else
-                                    @foreach ($programs as $index => $program)
-                                    <tr>
-                                        <td class="align-middle text-center text-sm">
-                                            <p class="text-sm font-weight-bold mb-0">{{ $program->code }}</p>
-                                        </td>
-                                        <td>
-                                            <p class="text-sm font-weight-bold mb-0">{{ $program->name }}</p>
-                                        </td>
-                                        <td class="align-middle text-center text-sm">
-                                            <p class="text-sm font-weight-bold mb-0">{{ $program->created_at->format('d/m/Y') }}</p>
-                                        </td>
-                                        <td class="align-middle text-center text-sm">
-                                            <p class="text-sm font-weight-bold mb-0">{{ $program->updated_at->format('d/m/Y') }}</p>
-                                        </td>
-                                        <td class="align-middle">
-                                            <div class="d-flex gap-2 justify-content-center align-items-center">
-                                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pencil"></i></button>
-                                                <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="{{ $program->id }}"><i class="fas fa-trash"></i></button>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    @endforeach
-                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -69,59 +40,329 @@
             </div>
         </div>
     </div>
+@endsection
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+<div class="modal fade" id="createProgramModal" tabindex="-1" aria-labelledby="createProgramModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createProgramModalLabel">Create New Program</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="createProgramForm" method="POST">
                 <div class="modal-body">
-                    ...
+                    @csrf
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code</label>
+                        <input type="text" class="form-control" id="code" name="code">
+                        <div id="codeError" class="text-danger text-sm" style="display: none;"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                        <div id="nameError" class="text-danger text-sm" style="display: none;"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-success" id="submitBtn">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
-@endsection
+</div>
+
+<div class="modal fade" id="editProgramModal" tabindex="-1" aria-labelledby="editProgramModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProgramModalLabel">Modal Title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editProgramForm" method="POST">
+                <div class="modal-body">
+                    @csrf
+                    <input type="hidden" id="programId" name="id">
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code</label>
+                        <input type="text" class="form-control" id="code-edit" name="code">
+                        <div id="codeError" class="text-danger text-sm" style="display: none;"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name-edit" name="name">
+                        <div id="nameError" class="text-danger text-sm" style="display: none;"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description-edit" name="description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" id="submitBtn">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     $(document).ready(function () {
-        // Attach click event to delete buttons
-        $('.delete-btn').on('click', function () {
-            var itemId = $(this).data('id');
-            // Show SweetAlert confirmation dialog
+
+        $.ajax({
+            url: '/program/fetch-data',
+            method: 'GET',
+            success: function(response) {
+                let rows = '';
+                $.each(response, function(index, item) {
+                    rows += `'<tr>
+                                <td class="align-middle text-center text-sm">
+                                    <p class="text-sm font-weight-bold mb-0">${item.code}</p>
+                                </td>
+                                <td>
+                                    <p class="text-sm font-weight-bold mb-0">${item.name}</p>
+                                </td>
+                                <td class="align-middle text-center text-sm">
+                                    <p class="text-sm font-weight-bold mb-0">${new Date(item.created_at).toLocaleDateString()}</p>
+                                </td>
+                                <td class="align-middle text-center text-sm">
+                                    <p class="text-sm font-weight-bold mb-0">${new Date(item.updated_at).toLocaleDateString()}</p>
+                                </td>
+                                <td class="align-middle">
+                                    <div class="d-flex gap-2 justify-content-center align-items-center">
+                                        <button type="button" class="btn btn-light btn-sm edit-btn" data-id="${item.id}"><i class="fas fa-pencil"></i></button>
+                                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="${item.id}"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>'`;
+                });
+
+                $('#data-table tbody').html(rows);
+
+                $('#createProgramButton').click(function() {
+                    $("#codeError").hide().text('');
+                    $("#nameError").hide().text('');
+                    $("#createProgramForm")[0].reset();
+                    $("#createProgramModal").modal('show');
+                });
+
+                $("#createProgramForm").submit(function(event) {
+                    event.preventDefault();
+
+                    $("#submitBtn").prop('disabled', true);
+                    var formData = $(this).serialize();
+
+                    $("#codeError").hide().text('');
+                    $("#nameError").hide().text('');
+
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: 'POST',
+                        data: formData,
+                        success: function(response) {
+                            if (response.success) {
+                                var newRow = `<tr>
+                                    <td class="align-middle text-center text-sm">
+                                        <p class="text-sm font-weight-bold mb-0">${response.data.code}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-sm font-weight-bold mb-0">${response.data.name}</p>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <p class="text-sm font-weight-bold mb-0">${new Date(response.data.created_at).toLocaleDateString()}</p>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <p class="text-sm font-weight-bold mb-0">${new Date(response.data.updated_at).toLocaleDateString()}</p>
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="d-flex gap-2 justify-content-center align-items-center">
+                                            <button type="button" class="btn btn-light btn-sm edit-btn" data-id="${response.data.id}">
+                                                <i class="fas fa-pencil"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="${response.data.id}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>`;
+
+                                $('#data-table tbody').append(newRow);
+
+                                $("#createProgramModal").modal('hide');
+                                $("#successMessage").text(response.message).show();
+                                $("#submitBtn").prop('disabled', false);
+
+                                Swal.fire(
+                                    'Created!',
+                                    'Your item has been created.',
+                                    'success'
+                                );
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    'Something went wrong. Please try again.',
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr) {
+                            var errors = xhr.responseJSON.errors;
+                            if (errors.code) {
+                                $("#codeError").text(errors.code[0]).show();
+                            }
+                            if (errors.name) {
+                                $("#nameError").text(errors.name[0]).show();
+                            }
+                            $("#submitBtn").prop('disabled', false);
+                        }
+                    });
+                });
+            },
+            error: function() {
+                alert('Error fetching data.');
+            }
+        });
+
+        $('#data-table').on('click', '.delete-btn', function() {
+            var id = $(this).data('id');
+
             Swal.fire({
                 title: 'Are you sure?',
-                text: 'You won\'t be able to revert this!',
+                text: "You won't be able to revert this!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'Cancel'
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'Cancel',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Create a form and submit it using jQuery
-                    var form = $('<form>', {
-                        method: 'POST',
-                        action: '/program/destroy/' + itemId
-                    });
+                    $.ajax({
+                        url: '/program/destroy/' + id,
+                        method: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                $('button[data-id="' + id + '"]').closest('tr').remove();
 
-                    // Add CSRF token and DELETE method to the form
-                    form.append('@csrf');
-                    form.append('<input type="hidden" name="_method" value="DELETE">');
-                    $('body').append(form);
-                    form.submit();
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Your item has been deleted.',
+                                    'success'
+                                );
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    'Something went wrong. Please try again.',
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function() {
+                            Swal.fire(
+                                'Error!',
+                                'There was an error deleting the item.',
+                                'error'
+                            );
+                        }
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire(
+                        'Cancelled',
+                        'Your item is safe!',
+                        'info'
+                    );
                 }
             });
         });
+
+
+        $('#data-table').on('click', '.edit-btn', function() {
+            var id = $(this).data('id');
+
+            $.ajax({
+                url: '/program/edit/' + id,
+                method: 'GET',
+                success: function(response) {
+                    $('#programId').val(response.data.id);
+                    $('#code-edit').val(response.data.code);
+                    $('#name-edit').val(response.data.name);
+                    $('#description-edit').val(response.data.description);
+
+                    $('#editProgramModal').modal('show');
+                }
+            });
+        });
+
+        $('#editProgramForm').submit(function(event) {
+            event.preventDefault();
+            var id = $('#programId').val();
+            var form = $(this);
+            var formData = form.serialize();
+
+            $.ajax({
+                url: 'program/' + id + '/update',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $('#editProgramModal').modal('hide');
+
+                    var updatedRow = `
+                        <td class="align-middle text-center text-sm">
+                            <p class="text-sm font-weight-bold mb-0">${response.data.code}</p>
+                        </td>
+                        <td>
+                            <p class="text-sm font-weight-bold mb-0">${response.data.name}</p>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                            <p class="text-sm font-weight-bold mb-0">${new Date(response.data.created_at).toLocaleDateString()}</p>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                            <p class="text-sm font-weight-bold mb-0">${new Date(response.data.updated_at).toLocaleDateString()}</p>
+                        </td>
+                        <td class="align-middle">
+                            <div class="d-flex gap-2 justify-content-center align-items-center">
+                                <button type="button" class="btn btn-light btn-sm edit-btn" data-id="${response.data.id}">
+                                    <i class="fas fa-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="${response.data.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+
+                    $('#data-table').find('button[data-id="' + response.data.id + '"]').closest('tr').html(updatedRow);
+
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Program successfully updated",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                },
+                error: function(xhr) {
+                    var errors = xhr.responseJSON.errors;
+                    if (errors.code) {
+                        $("#codeError").text(errors.code[0]).show();
+                    }
+                    if (errors.name) {
+                        $("#nameError").text(errors.name[0]).show();
+                    }
+                    $("#submitBtn").prop('disabled', false);
+                }
+            });
+        });
+
     });
 </script>

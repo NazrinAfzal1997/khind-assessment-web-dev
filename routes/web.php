@@ -47,13 +47,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix('/program')->name('program.')->group(function () {
         Route::get('/', [ProgramController::class, 'index'])->name('index');
+        Route::get('/fetch-data', [ProgramController::class, 'fetchData'])->name('fetchData');
+        Route::get('/create', [ProgramController::class, 'create'])->name('create');
+        Route::post('/store', [ProgramController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [ProgramController::class, 'edit'])->name('edit');
+        Route::post('/{id}/update', [ProgramController::class, 'update'])->name('update');
         Route::delete('/destroy/{id}', [ProgramController::class, 'destroy'])->name('destroy');
     });
-
-    // Route::prefix('/student-managenent')->name('student-managenent.')->group(function ()
-    // {
-    //     Route::post('/index', [StudentManagementController::class, 'index']);
-    // });
 	Route::get('/{page}', [PageController::class, 'index'])->name('page');
 	Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });

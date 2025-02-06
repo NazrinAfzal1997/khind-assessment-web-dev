@@ -11,11 +11,13 @@ const mix = require('laravel-mix');
  |
  */
 
+mix.js('resources/js/app.js', 'public/js')
+    .sass('resources/sass/app.scss', 'public/css')
+    .css('resources/css/app.css', 'public/css');
+
 mix.js('resources/js/app.js', 'public/assets/js/argon-dashboard.js')
     .sass('resources/scss/argon-dashboard.scss', 'public/assets/css/argon-dashboard.css', [
         //
     ]);
 
-mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css')
-    .css('resources/css/app.css', 'public/css');
+
