@@ -9,9 +9,7 @@ class ProgramController extends Controller
 {
     public function index()
     {
-        $programs = Program::all();
-
-        return view("program.index", compact('programs'));
+        return view("program.index");
     }
 
     public function fetchData()
@@ -93,12 +91,12 @@ class ProgramController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Item deleted successfully!',
+                'message' => 'Program deleted successfully!',
             ], 200);
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Item not found.',
+                'message' => 'Program not found.',
             ], 404);
         }
     }
