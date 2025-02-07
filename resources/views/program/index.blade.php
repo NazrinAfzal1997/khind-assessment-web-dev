@@ -353,12 +353,20 @@
                 },
                 error: function(xhr) {
                     var errors = xhr.responseJSON.errors;
+                    var message_text = "Something not right.";
                     if (errors.code) {
-                        $("#codeError").text(errors.code[0]).show();
+                        // $("#codeError").text(errors.code[0]).show();
+                        message_text = errors.code[0];
                     }
                     if (errors.name) {
-                        $("#nameError").text(errors.name[0]).show();
+                        // $("#nameError").text(errors.name[0]).show();
+                        message_text = errors.name[0];
                     }
+                    Swal.fire({
+                        title: "Got input not filled in properly!",
+                        text: message_text,
+                        icon: "Warning"
+                    });
                     $("#submitBtn").prop('disabled', false);
                 }
             });
