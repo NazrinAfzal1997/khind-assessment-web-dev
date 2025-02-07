@@ -111,7 +111,7 @@ class StudentManagementController extends Controller
             'registration_number' => 'required|string|unique:students,registration_number,' . $student->id,
             'contact_number' => 'required|string',
             'start_program_date' => 'required|date',
-            'end_program_date' => 'required|date|after_or_equal:start_program_date',
+            'end_program_date' => 'required|date|after:start_program_date',
         ], [
             'first_name.required' => 'First name is required.',
             'first_name.string' => 'First name must be a valid string.',
@@ -129,7 +129,7 @@ class StudentManagementController extends Controller
             'start_program_date.date' => 'Start program date must be a valid date.',
             'end_program_date.required' => 'End program date is required.',
             'end_program_date.date' => 'End program date must be a valid date.',
-            'end_program_date.after_or_equal' => 'End program date must be after or equal to start program date.',
+            'end_program_date.after' => 'End program date must be after start program date.',
         ]);
 
         $student->update([
@@ -143,6 +143,8 @@ class StudentManagementController extends Controller
             'end_program_date' => $request->end_program_date,
             'updated_by' => Auth::id(),
         ]);
+
+        $student->load('program');
 
         return response()->json([
             'message' => 'Student updated successfully',

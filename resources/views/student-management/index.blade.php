@@ -45,7 +45,7 @@
 @endsection
 
 <div class="modal fade" id="createStudentModal" tabindex="-1" aria-labelledby="createStudentModalLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-lg">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createStudentModalLabel">Create New Student</h5>
@@ -111,7 +111,7 @@
 </div>
 
 <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editStudentModalLabel">Edit Student</h5>
@@ -459,39 +459,6 @@
                         </td>
                     `);
 
-                    // var updatedRow = `
-                    //     <td class="text-center align-middle text-sm">
-                    //         <p class="text-sm font-weight-bold mb-0">${index + 1}</p>
-                    //     </td>
-                    //     <td class="align-middle text-sm">
-                    //         <p class="text-sm font-weight-bold mb-0">${response.data.first_name}</p>
-                    //     </td>
-                    //     <td class="align-middle text-sm">
-                    //         <p class="text-sm font-weight-bold mb-0">${response.data.last_name}</p>
-                    //     </td>
-                    //     <td class="align-middle text-sm">
-                    //         <p class="text-sm font-weight-bold mb-0">${response.data.program ? response.data.program.code + ' - '  + response.data.program.name : 'N/A'}</p>
-                    //     </td>
-                    //     <td class="align-middle text-sm">
-                    //         <p class="text-sm font-weight-bold mb-0">${new Date(response.data.start_program_date).toLocaleDateString()}</p>
-                    //     </td>
-                    //     <td class="align-middle text-sm">
-                    //         <p class="text-sm font-weight-bold mb-0">${new Date(response.data.end_program_date).toLocaleDateString()}</p>
-                    //     </td>
-                    //     <td class="align-middle">
-                    //         <div class="d-flex gap-2 justify-content-center align-items-center">
-                    //             <button type="button" class="btn btn-light btn-sm edit-btn" data-id="${response.data.id}">
-                    //                 <i class="fas fa-pencil"></i>
-                    //             </button>
-                    //             <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="${response.data.id}">
-                    //                 <i class="fas fa-trash"></i>
-                    //             </button>
-                    //         </div>
-                    //     </td>
-                    // `;
-
-                    // $('#data-table').find('button[data-id="' + response.data.id + '"]').closest('tr').html(updatedRow);
-
                     Swal.fire({
                         position: "center",
                         icon: "success",
@@ -502,27 +469,45 @@
                 },
                 error: function(xhr) {
                     var errors = xhr.responseJSON.errors;
+
+                    var message_text = "Something not right.";
                     if (errors.first_name) {
-                        $("#firstNameError").text(errors.first_name[0]).show();
+                        // $("#firstNameError").text(errors.first_name[0]).show();
+                        message_text = errors.first_name[0];
                     }
                     if (errors.last_name) {
-                        $("#lastNameError").text(errors.last_name[0]).show();
+                        // $("#lastNameError").text(errors.last_name[0]).show();
+                        message_text = errors.last_name[0];
                     }
                     if (errors.contact_number) {
-                        $("#contactNumberError").text(errors.contact_number[0]).show();
+                        // $("#contactNumberError").text(errors.contact_number[0]).show();
+                        message_text = errors.contact_number[0];
                     }
                     if (errors.registration_number) {
-                        $("#registrationNumberError").text(errors.registration_number[0]).show();
+                        // console.log(errors.registration_number[0]);
+                        // console.log($("#registrationNumberError"));
+                        // $("#registrationNumberError").text(errors.registration_number[0]).show();
+                        message_text = errors.registration_number[0];
                     }
                     if (errors.program_id) {
-                        $("#programError").text(errors.program_id[0]).show();
+                        // $("#programError").text(errors.program_id[0]).show();
+                        message_text = errors.program_id[0];
                     }
                     if (errors.start_program_date) {
-                        $("#startDateError").text(errors.start_program_date[0]).show();
+                        // $("#startDateError").text(errors.start_program_date[0]).show();
+                        message_text = errors.start_program_date[0];
                     }
                     if (errors.end_program_date) {
-                        $("#endtDateError").text(errors.end_program_date[0]).show();
+                        // $("#endtDateError").text(errors.end_program_date[0]).show();
+                        message_text = errors.end_program_date[0];
                     }
+
+                    Swal.fire({
+                        title: "Got input not filled in properly!",
+                        text: message_text,
+                        icon: "Warning"
+                    });
+
                     $("#submitBtn").prop('disabled', false);
                 }
             });
