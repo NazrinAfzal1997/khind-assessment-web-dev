@@ -165,7 +165,7 @@
                     $("#nameError").hide().text('');
 
                     $.ajax({
-                        url: $(this).attr('action'),
+                        url: 'program/store',
                         type: 'POST',
                         data: formData,
                         success: function(response) {
