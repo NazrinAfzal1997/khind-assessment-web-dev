@@ -1,4 +1,6 @@
-# Laravel Project Setup
+# Student Management System
+
+**Khind Assessment Feb-2025 by Nazrin Afzal**
 
 ## 1. Clone the Repository
 ```bash
