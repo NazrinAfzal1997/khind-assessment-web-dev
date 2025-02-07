@@ -37,7 +37,7 @@ class StudentManagementController extends Controller
         $request->validate([
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'address' => 'required|string',
+            'address' => 'string',
             'program_id' => 'required|exists:programs,id',
             'registration_number' => 'required|string|unique:students,registration_number',
             'contact_number' => 'required|string',
@@ -48,7 +48,6 @@ class StudentManagementController extends Controller
             'first_name.string' => 'First name must be a valid string.',
             'last_name.required' => 'Last name is required.',
             'last_name.string' => 'Last name must be a valid string.',
-            'address.required' => 'Address is required.',
             'address.string' => 'Address must be a valid string.',
             'program_id.required' => 'Program is required.',
             'program_id.exists' => 'The selected program is invalid.',
@@ -76,7 +75,13 @@ class StudentManagementController extends Controller
             'created_by' => Auth::id(),
         ]);
 
-        return response()->json(['message' => 'Student created successfully', 'student' => $student], 201);
+        $student->load('program');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Student created successfully',
+            'data' => $student
+        ],200);
     }
 
     public function edit($id)
@@ -96,12 +101,12 @@ class StudentManagementController extends Controller
 
     public function update(Request $request, $id)
     {
-        $student = Student::findOrFail($id);
+        $student = Student::with('program')->findOrFail($id);
 
         $request->validate([
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'address' => 'required|string',
+            'address' => 'string',
             'program_id' => 'required|exists:programs,id',
             'registration_number' => 'required|string|unique:students,registration_number,' . $student->id,
             'contact_number' => 'required|string',
@@ -112,7 +117,6 @@ class StudentManagementController extends Controller
             'first_name.string' => 'First name must be a valid string.',
             'last_name.required' => 'Last name is required.',
             'last_name.string' => 'Last name must be a valid string.',
-            'address.required' => 'Address is required.',
             'address.string' => 'Address must be a valid string.',
             'program_id.required' => 'Program is required.',
             'program_id.exists' => 'The selected program is invalid.',

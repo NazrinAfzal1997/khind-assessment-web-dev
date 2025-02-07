@@ -43,7 +43,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix('/student-management')->name('student-management.')->group(function () {
         Route::get('/', [StudentManagementController::class, 'index'])->name('index');
-        Route::get('/', [StudentManagementController::class, 'index'])->name('index');
         Route::get('/fetch-data', [StudentManagementController::class, 'fetchData'])->name('fetchData');
         Route::get('/create', [StudentManagementController::class, 'create'])->name('create');
         Route::post('/store', [StudentManagementController::class, 'store'])->name('store');

@@ -45,7 +45,7 @@
 @endsection
 
 <div class="modal fade" id="createStudentModal" tabindex="-1" aria-labelledby="createStudentModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog  modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createStudentModalLabel">Create New Student</h5>
@@ -55,19 +55,51 @@
                 <div class="modal-body">
                     @csrf
                     <div class="mb-3">
-                        <label for="code" class="form-label">Code</label>
-                        <input type="text" class="form-control" id="code" name="code">
-                        <div id="codeError" class="text-danger text-sm" style="display: none;"></div>
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name">
+                        <div id="firstNameError" class="text-danger text-sm" style="display: none;"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" name="name">
-                        <div id="nameError" class="text-danger text-sm" style="display: none;"></div>
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name">
+                        <div id="lastNameError" class="text-danger text-sm" style="display: none;"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                        <label for="contact_number" class="form-label">Contact Number</label>
+                        <input type="text" class="form-control" id="contact_number" name="contact_number">
+                        <div id="contactNumberError" class="text-danger text-sm" style="display: none;"></div>
                     </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea class="form-control" id="address" name="address" rows="3"></textarea>
+                    </div>
+                    <hr>
+                    <div class="mb-3">
+                        <label for="registration_number" class="form-label">Student Registration Number</label>
+                        <input type="text" class="form-control" id="registration_number" name="registration_number">
+                        <div id="registrationNumberError" class="text-danger text-sm" style="display: none;"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="program_id" class="form-label">Program</label>
+                        <select class="form-control" id="program_id" name="program_id">
+                            <option value="">Select a Program</option>
+                            @foreach($programs as $program)
+                                <option value="{{ $program->id }}">{{ $program->code }} - {{ $program->name }}</option>
+                            @endforeach
+                        </select>
+                        <div id="programError" class="text-danger text-sm" style="display: none;"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="start_program_date" class="form-label">Start Program Date</label>
+                        <input type="date" class="form-control" id="start_program_date" name="start_program_date">
+                        <div id="startDateError" class="text-danger text-sm" style="display: none;"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="end_program_date" class="form-label">End Program Date</label>
+                        <input type="date" class="form-control" id="end_program_date" name="end_program_date">
+                        <div id="endtDateError" class="text-danger text-sm" style="display: none;"></div>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success" id="submitBtn">Save</button>
@@ -82,7 +114,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editStudentModalLabel">Modal Title</h5>
+                <h5 class="modal-title" id="editStudentModalLabel">Edit Student</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="editStudentForm" method="POST">
@@ -90,18 +122,49 @@
                     @csrf
                     <input type="hidden" id="studentId" name="id">
                     <div class="mb-3">
-                        <label for="code" class="form-label">Code</label>
-                        <input type="text" class="form-control" id="code-edit" name="code">
-                        <div id="codeError" class="text-danger text-sm" style="display: none;"></div>
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="first_name-edit" name="first_name">
+                        <div id="firstNameError" class="text-danger text-sm" style="display: none;"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name-edit" name="name">
-                        <div id="nameError" class="text-danger text-sm" style="display: none;"></div>
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="last_name-edit" name="last_name">
+                        <div id="lastNameError" class="text-danger text-sm" style="display: none;"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description-edit" name="description" rows="3"></textarea>
+                        <label for="contact_number" class="form-label">Contact Number</label>
+                        <input type="text" class="form-control" id="contact_number-edit" name="contact_number">
+                        <div id="contactNumberError" class="text-danger text-sm" style="display: none;"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea class="form-control" id="address-edit" name="address" rows="3"></textarea>
+                    </div>
+                    <hr>
+                    <div class="mb-3">
+                        <label for="registration_number" class="form-label">Student Registration Number</label>
+                        <input type="text" class="form-control" id="registration_number-edit" name="registration_number">
+                        <div id="registrationNumberError" class="text-danger text-sm" style="display: none;"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="program_id" class="form-label">Program</label>
+                        <select class="form-control" id="program_id-edit" name="program_id">
+                            <option value="">Select a Program</option>
+                            @foreach($programs as $program)
+                                <option value="{{ $program->id }}">{{ $program->code }} - {{ $program->name }}</option>
+                            @endforeach
+                        </select>
+                        <div id="programError" class="text-danger text-sm" style="display: none;"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="start_program_date" class="form-label">Start Program Date</label>
+                        <input type="date" class="form-control" id="start_program_date-edit" name="start_program_date">
+                        <div id="startDateError" class="text-danger text-sm" style="display: none;"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="end_program_date" class="form-label">End Program Date</label>
+                        <input type="date" class="form-control" id="end_program_date-edit" name="end_program_date">
+                        <div id="endtDateError" class="text-danger text-sm" style="display: none;"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -157,8 +220,13 @@
                 $('#data-table tbody').html(rows);
 
                 $('#createStudentButton').click(function() {
-                    $("#codeError").hide().text('');
-                    $("#nameError").hide().text('');
+                    $("#firstNameError").hide().text('');
+                    $("#lastNameError").hide().text('');
+                    $("#contactNumberError").hide().text('');
+                    $("#registrationNumberError").hide().text('');
+                    $("#programError").hide().text('');
+                    $("#startDateError").hide().text('');
+                    $("#endtDateError").hide().text('');
                     $("#createStudentForm")[0].reset();
                     $("#createStudentModal").modal('show');
                 });
@@ -169,30 +237,40 @@
                     $("#submitBtn").prop('disabled', true);
                     var formData = $(this).serialize();
 
-                    $("#codeError").hide().text('');
-                    $("#nameError").hide().text('');
+                    $("#firstNameError").hide().text('');
+                    $("#lastNameError").hide().text('');
+                    $("#contactNumberError").hide().text('');
+                    $("#registrationNumberError").hide().text('');
+                    $("#programError").hide().text('');
+                    $("#startDateError").hide().text('');
+                    $("#endtDateError").hide().text('');
 
                     $.ajax({
-                        url: $(this).attr('action'),
+                        url: 'student-management/store',
                         type: 'POST',
                         data: formData,
                         success: function(response) {
                             if (response.success) {
+                                var index = $('#data-table tbody tr').length + 1;
+
                                 var newRow = `<tr>
-                                    <td class="align-middle text-center text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">${response.data.code}</p>
+                                    <td class="text-center align-middle text-sm">
+                                        <p class="text-sm font-weight-bold mb-0">${index}</p>
                                     </td>
-                                    <td>
-                                        <p class="text-sm font-weight-bold mb-0">${response.data.name}</p>
+                                    <td class="align-middle text-sm">
+                                        <p class="text-sm font-weight-bold mb-0">${response.data.first_name}</p>
                                     </td>
-                                    <td>
-                                        <p class="text-sm font-weight-bold mb-0">${response.data.name}</p>
+                                    <td class="align-middle text-sm">
+                                        <p class="text-sm font-weight-bold mb-0">${response.data.last_name}</p>
                                     </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">${new Date(response.data.created_at).toLocaleDateString()}</p>
+                                    <td class="align-middle text-sm">
+                                        <p class="text-sm font-weight-bold mb-0">${response.data.program ? response.data.program.code + ' - '  + response.data.program.name : 'N/A'}</p>
                                     </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">${new Date(response.data.updated_at).toLocaleDateString()}</p>
+                                    <td class="align-middle text-sm">
+                                        <p class="text-sm font-weight-bold mb-0">${new Date(response.data.start_program_date).toLocaleDateString()}</p>
+                                    </td>
+                                    <td class="align-middle text-sm">
+                                        <p class="text-sm font-weight-bold mb-0">${new Date(response.data.end_program_date).toLocaleDateString()}</p>
                                     </td>
                                     <td class="align-middle">
                                         <div class="d-flex gap-2 justify-content-center align-items-center">
@@ -214,7 +292,7 @@
 
                                 Swal.fire(
                                     'Created!',
-                                    'Your item has been created.',
+                                    'Student has been created.',
                                     'success'
                                 );
                             } else {
@@ -227,11 +305,26 @@
                         },
                         error: function(xhr) {
                             var errors = xhr.responseJSON.errors;
-                            if (errors.code) {
-                                $("#codeError").text(errors.code[0]).show();
+                            if (errors.first_name) {
+                                $("#firstNameError").text(errors.first_name[0]).show();
                             }
-                            if (errors.name) {
-                                $("#nameError").text(errors.name[0]).show();
+                            if (errors.last_name) {
+                                $("#lastNameError").text(errors.last_name[0]).show();
+                            }
+                            if (errors.contact_number) {
+                                $("#contactNumberError").text(errors.contact_number[0]).show();
+                            }
+                            if (errors.registration_number) {
+                                $("#registrationNumberError").text(errors.registration_number[0]).show();
+                            }
+                            if (errors.program_id) {
+                                $("#programError").text(errors.program_id[0]).show();
+                            }
+                            if (errors.start_program_date) {
+                                $("#startDateError").text(errors.start_program_date[0]).show();
+                            }
+                            if (errors.end_program_date) {
+                                $("#endtDateError").text(errors.end_program_date[0]).show();
                             }
                             $("#submitBtn").prop('disabled', false);
                         }
@@ -305,9 +398,14 @@
                 method: 'GET',
                 success: function(response) {
                     $('#studentId').val(response.data.id);
-                    $('#code-edit').val(response.data.code);
-                    $('#name-edit').val(response.data.name);
-                    $('#description-edit').val(response.data.description);
+                    $('#first_name-edit').val(response.data.first_name);
+                    $('#last_name-edit').val(response.data.last_name);
+                    $('#contact_number-edit').val(response.data.contact_number);
+                    $('#address-edit').val(response.data.address);
+                    $('#registration_number-edit').val(response.data.registration_number);
+                    $('#program_id-edit').val(response.data.program_id);
+                    $('#start_program_date-edit').val(response.data.start_program_date);
+                    $('#end_program_date-edit').val(response.data.end_program_date);
 
                     $('#editStudentModal').modal('show');
                 }
@@ -321,24 +419,33 @@
             var formData = form.serialize();
 
             $.ajax({
-                url: 'student/' + id + '/update',
+                url: 'student-management/' + id + '/update',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
                     $('#editStudentModal').modal('hide');
 
-                    var updatedRow = `
-                        <td class="align-middle text-center text-sm">
-                            <p class="text-sm font-weight-bold mb-0">${response.data.code}</p>
+                    var row = $('#data-table').find('button[data-id="' + response.data.id + '"]').closest('tr'); // Find existing row
+                    var rowIndex = row.index() + 1;
+
+                    row.html(`
+                        <td class="text-center align-middle text-sm">
+                            <p class="text-sm font-weight-bold mb-0">${rowIndex}</p> <!-- Preserve index -->
                         </td>
-                        <td>
-                            <p class="text-sm font-weight-bold mb-0">${response.data.name}</p>
+                        <td class="align-middle text-sm">
+                            <p class="text-sm font-weight-bold mb-0">${response.data.first_name}</p>
                         </td>
-                        <td class="align-middle text-center text-sm">
-                            <p class="text-sm font-weight-bold mb-0">${new Date(response.data.created_at).toLocaleDateString()}</p>
+                        <td class="align-middle text-sm">
+                            <p class="text-sm font-weight-bold mb-0">${response.data.last_name}</p>
                         </td>
-                        <td class="align-middle text-center text-sm">
-                            <p class="text-sm font-weight-bold mb-0">${new Date(response.data.updated_at).toLocaleDateString()}</p>
+                        <td class="align-middle text-sm">
+                            <p class="text-sm font-weight-bold mb-0">${response.data.program ? response.data.program.code + ' - '  + response.data.program.name : 'N/A'}</p>
+                        </td>
+                        <td class="align-middle text-sm">
+                            <p class="text-sm font-weight-bold mb-0">${new Date(response.data.start_program_date).toLocaleDateString()}</p>
+                        </td>
+                        <td class="align-middle text-sm">
+                            <p class="text-sm font-weight-bold mb-0">${new Date(response.data.end_program_date).toLocaleDateString()}</p>
                         </td>
                         <td class="align-middle">
                             <div class="d-flex gap-2 justify-content-center align-items-center">
@@ -350,9 +457,40 @@
                                 </button>
                             </div>
                         </td>
-                    `;
+                    `);
 
-                    $('#data-table').find('button[data-id="' + response.data.id + '"]').closest('tr').html(updatedRow);
+                    // var updatedRow = `
+                    //     <td class="text-center align-middle text-sm">
+                    //         <p class="text-sm font-weight-bold mb-0">${index + 1}</p>
+                    //     </td>
+                    //     <td class="align-middle text-sm">
+                    //         <p class="text-sm font-weight-bold mb-0">${response.data.first_name}</p>
+                    //     </td>
+                    //     <td class="align-middle text-sm">
+                    //         <p class="text-sm font-weight-bold mb-0">${response.data.last_name}</p>
+                    //     </td>
+                    //     <td class="align-middle text-sm">
+                    //         <p class="text-sm font-weight-bold mb-0">${response.data.program ? response.data.program.code + ' - '  + response.data.program.name : 'N/A'}</p>
+                    //     </td>
+                    //     <td class="align-middle text-sm">
+                    //         <p class="text-sm font-weight-bold mb-0">${new Date(response.data.start_program_date).toLocaleDateString()}</p>
+                    //     </td>
+                    //     <td class="align-middle text-sm">
+                    //         <p class="text-sm font-weight-bold mb-0">${new Date(response.data.end_program_date).toLocaleDateString()}</p>
+                    //     </td>
+                    //     <td class="align-middle">
+                    //         <div class="d-flex gap-2 justify-content-center align-items-center">
+                    //             <button type="button" class="btn btn-light btn-sm edit-btn" data-id="${response.data.id}">
+                    //                 <i class="fas fa-pencil"></i>
+                    //             </button>
+                    //             <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="${response.data.id}">
+                    //                 <i class="fas fa-trash"></i>
+                    //             </button>
+                    //         </div>
+                    //     </td>
+                    // `;
+
+                    // $('#data-table').find('button[data-id="' + response.data.id + '"]').closest('tr').html(updatedRow);
 
                     Swal.fire({
                         position: "center",
@@ -364,11 +502,26 @@
                 },
                 error: function(xhr) {
                     var errors = xhr.responseJSON.errors;
-                    if (errors.code) {
-                        $("#codeError").text(errors.code[0]).show();
+                    if (errors.first_name) {
+                        $("#firstNameError").text(errors.first_name[0]).show();
                     }
-                    if (errors.name) {
-                        $("#nameError").text(errors.name[0]).show();
+                    if (errors.last_name) {
+                        $("#lastNameError").text(errors.last_name[0]).show();
+                    }
+                    if (errors.contact_number) {
+                        $("#contactNumberError").text(errors.contact_number[0]).show();
+                    }
+                    if (errors.registration_number) {
+                        $("#registrationNumberError").text(errors.registration_number[0]).show();
+                    }
+                    if (errors.program_id) {
+                        $("#programError").text(errors.program_id[0]).show();
+                    }
+                    if (errors.start_program_date) {
+                        $("#startDateError").text(errors.start_program_date[0]).show();
+                    }
+                    if (errors.end_program_date) {
+                        $("#endtDateError").text(errors.end_program_date[0]).show();
                     }
                     $("#submitBtn").prop('disabled', false);
                 }
